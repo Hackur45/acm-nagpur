@@ -2,6 +2,7 @@ const assets = {
   blurredBg: "/blured-bg.jpg",
   backgroundVideo: "/about-video.mp4",
   loadingVideo : "/loading.mp4",
+  heroImage: "/hero_.webp",
   eventImages: [
     "https://via.placeholder.com/300x150",
     "https://via.placeholder.com/300x150",
