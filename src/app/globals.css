@@ -65,3 +65,29 @@
 
   --ring: 217.2 32.6% 17.5%; /* Dark gray for focus rings */
 }
+
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes marquee-scroll-vertical {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-100%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee-scroll var(--duration, 40s) linear infinite;
+}
+
+.animate-marquee-vertical {
+  animation: marquee-scroll-vertical var(--duration, 40s) linear infinite;
+}
