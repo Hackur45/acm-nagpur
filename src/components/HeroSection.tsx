@@ -2,6 +2,8 @@
 
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
+import { assets } from '@/assets/assets'; // Ensure correct import
 
 const words = ["Welcome to ACM Nagpur", "Empowering Developers", "Innovating the Future"];
 
@@ -50,16 +52,20 @@ export default function HeroSection() {
         </button>
       </motion.div>
       
-      {/* Right Placeholder */}
+      {/* Right Section - Image */}
       <motion.div 
         initial={{ opacity: 0, x: 50 }} 
         animate={{ opacity: 1, x: 0 }} 
         transition={{ duration: 0.8 }}
         className="md:w-1/2 flex justify-center mt-10 md:mt-0"
       >
-        <div className="w-[500px] h-[500px] bg-gray-300 rounded-lg shadow-lg flex items-center justify-center text-gray-700 text-lg font-semibold">
-          Image Placeholder
-        </div>
+        <Image 
+          src={assets.heroImage} 
+          alt="ACM Nagpur Banner"
+          width={500}
+          height={500}
+          className="rounded-lg shadow-lg"
+        />
       </motion.div>
     </section>
   );
