@@ -6,12 +6,33 @@ import { Button } from "@/components/ui/button";
 import { InteractiveGridPattern } from "@/components/magicui/interactive-grid-pattern";
 import Image from "next/image";
 
+// Allowed chapters
+const allowedChapters = ["rcoem", "vnit", "ycce", "raisoni"];
 
-const events = [
-  { id: 1, name: "AI/ML Bootcamp", description: "A beginner-friendly workshop on Machine Learning.", tags: ["AI/ML", "Workshop"], hostedBy: "ACM Professional Chapter" },
-  { id: 2, name: "Blockchain Hackathon", description: "Build decentralized applications in a 48-hour hackathon.", tags: ["Blockchain", "Hackathon"], hostedBy: "ACM RCOEM Student Chapter" },
-  { id: 3, name: "Web Development Summit", description: "A hands-on workshop on full-stack web development.", tags: ["Web Dev", "Workshop"], hostedBy: "ACM Professional Chapter" },
-];
+const chapterEvents: Record<string, Array<{ id: number; name: string; description: string; tags: string[]; hostedBy: string }>> = {
+  rcoem: [
+    { id: 1, name: "AI/ML Bootcamp", description: "A beginner-friendly workshop on Machine Learning.", tags: ["AI/ML", "Workshop"], hostedBy: "ACM RCOEM" },
+    { id: 2, name: "Web Dev Hackathon", description: "Compete in a full-stack hackathon.", tags: ["Web Dev", "Hackathon"], hostedBy: "ACM RCOEM" },
+    { id: 3, name: "Blockchain Basics", description: "Learn the fundamentals of blockchain technology.", tags: ["Blockchain", "Tech Talk"], hostedBy: "ACM RCOEM" },
+    { id: 4, name: "Competitive Programming Contest", description: "Sharpen your problem-solving skills.", tags: ["Coding", "Contest"], hostedBy: "ACM RCOEM" },
+  ],
+  vnit: [
+    { id: 1, name: "Data Science Symposium", description: "A conference on AI and Data Science.", tags: ["AI", "Data Science"], hostedBy: "ACM VNIT" },
+    { id: 2, name: "Cybersecurity Workshop", description: "Learn about ethical hacking.", tags: ["Security", "Workshop"], hostedBy: "ACM VNIT" },
+    { id: 3, name: "IOT & Smart Systems", description: "A workshop on IoT and smart devices.", tags: ["IoT", "Workshop"], hostedBy: "ACM VNIT" },
+  ],
+  ycce: [
+    { id: 1, name: "Cloud Computing Basics", description: "An introductory workshop on AWS and GCP.", tags: ["Cloud", "Workshop"], hostedBy: "ACM YCCE" },
+    { id: 2, name: "Robotics Seminar", description: "A session on robotics and automation.", tags: ["Robotics", "Tech Talk"], hostedBy: "ACM YCCE" },
+  ],
+  raisoni: [
+    { id: 1, name: "Game Development Jam", description: "Create a game in 24 hours!", tags: ["Game Dev", "Hackathon"], hostedBy: "ACM Raisoni" },
+    { id: 2, name: "Python for AI", description: "A workshop on AI using Python.", tags: ["Python", "AI"], hostedBy: "ACM Raisoni" },
+    { id: 3, name: "UI/UX Design Sprint", description: "A hands-on workshop on UI/UX fundamentals.", tags: ["Design", "Workshop"], hostedBy: "ACM Raisoni" },
+    { id: 4, name: "AR/VR Innovations", description: "A session on AR/VR technologies.", tags: ["AR/VR", "Tech Talk"], hostedBy: "ACM Raisoni" },
+    { id: 5, name: "Entrepreneurship in Tech", description: "A panel discussion on startups and innovation.", tags: ["Business", "Panel"], hostedBy: "ACM Raisoni" },
+  ],
+};
 
 
 const NumberTicker = ({ value }: { value: number }) => {
@@ -39,23 +60,29 @@ const NumberTicker = ({ value }: { value: number }) => {
 
 export default function ChapterPage({ params }: { params: Promise<{ chapter: string }> }) {
   const resolvedParams = use(params);
-  const chapterName = decodeURIComponent(resolvedParams.chapter.replace(/-/g, " "));
+  const chapterSlug = decodeURIComponent(resolvedParams.chapter).toLowerCase();
+
+  // Validate chapter
+  if (!allowedChapters.includes(chapterSlug)) {
+    return (
+      <main className="w-full min-h-screen flex items-center justify-center">
+        <h1 className="text-2xl font-bold text-red-600">Chapter not found!</h1>
+      </main>
+    );
+  }
+
+  const chapterName = chapterSlug.toUpperCase();
+  const events = chapterEvents[chapterSlug] || [];
 
   return (
     <main className="w-full min-h-screen">
       {/* Hero Section */}
       <section className="relative w-full h-[400px] md:h-[500px]">
-        <Image
-          src="/images/chapter-placeholder.jpg" // Replace with real image
-          alt="Chapter Image"
-          layout="fill"
-          objectFit="cover"
-          className="rounded-b-3xl"
-        />
+        <Image src="/chapter.webp" alt="Chapter Image" layout="fill" objectFit="cover" className="rounded-b-3xl" />
       </section>
 
       {/* Chapter Name & Description */}
-      <section className="max-w-5xl mx-auto text-center mt-8 px-6 md:px-12">
+      <section id="about" className="max-w-5xl mx-auto text-center mt-8 px-6 md:px-12">
         <motion.h1
           className="text-4xl md:text-5xl font-bold text-blue-900 capitalize"
           initial={{ opacity: 0, y: -20 }}
@@ -65,7 +92,7 @@ export default function ChapterPage({ params }: { params: Promise<{ chapter: str
           {chapterName} Chapter
         </motion.h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-6">
+        <div  className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-6">
           <motion.p
             className="text-lg text-gray-700 leading-relaxed"
             initial={{ opacity: 0, x: -20 }}
@@ -86,7 +113,7 @@ export default function ChapterPage({ params }: { params: Promise<{ chapter: str
       </section>
 
       {/* Events Section */}
-      <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden p-8">
+      <section id="events" className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden p-8">
         <InteractiveGridPattern className="absolute inset-0 h-full w-full" width={20} height={20} squares={[80, 80]} />
 
         <motion.h2
@@ -131,7 +158,7 @@ export default function ChapterPage({ params }: { params: Promise<{ chapter: str
       {/* Number Ticker Section */}
       <section className="flex flex-col items-center justify-center bg-gray-100 py-12">
         <h3 className="text-3xl font-semibold text-gray-900">Total Events Hosted</h3>
-        <NumberTicker value={120} />
+        <NumberTicker value={events.length * 20} />
       </section>
     </main>
   );
