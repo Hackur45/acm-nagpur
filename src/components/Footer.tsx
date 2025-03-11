@@ -24,8 +24,8 @@ export default function Footer() {
           <ul className="space-y-2">
             <li><Link href="/developers" className="hover:underline">Developers</Link></li>
             <li><Link href="/local-chapter" className="hover:underline">Local Chapter</Link></li>
-            <li><Link href="/events" className="hover:underline">Events</Link></li>
-            <li><Link href="/about" className="hover:underline">About</Link></li>
+            <li><Link href="#events" className="hover:underline">Events</Link></li>
+            <li><Link href="#about" className="hover:underline">About</Link></li>
             <li><Link href="/admin" className="hover:underline">Admin</Link></li>
           </ul>
         </div>

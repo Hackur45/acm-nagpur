@@ -52,14 +52,17 @@ export default function Navbar() {
 
       {/* Center Logo */}
       <div className="absolute left-1/2 transform -translate-x-1/2 w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-lg border-2 border-gray-300">
-        <Image
-          src="/acm-logo.jpg" 
-          alt="ACM Nagpur Logo"
-          width={60}
-          height={60}
-          className="rounded-full"
-          priority
-        />
+        <a href='#top'>
+           <Image
+            src="/acm-logo.png" 
+            alt="ACM Nagpur Logo"
+            width={60}
+            height={60}
+            className="rounded-full"
+            priority
+            />
+        </a>
+        
       </div>
 
       {/* Desktop Navigation - Right Section */}
