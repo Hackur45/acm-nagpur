@@ -3,7 +3,8 @@
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { assets } from '@/assets/assets'; // Ensure correct import
+import { assets } from '@/assets/assets';
+import { FlickeringGrid } from "@/components/magicui/flickering-grid";
 
 const words = ["Welcome to ACM Nagpur", "Empowering Developers", "Innovating the Future"];
 
@@ -34,39 +35,57 @@ export default function HeroSection() {
   }, [charIndex, isDeleting, wordIndex]);
 
   return (
-    <section className="w-full min-h-screen flex flex-col md:flex-row items-center justify-center px-6 md:px-12 py-20 bg-gray-100">
-      {/* Left Content */}
-      <motion.div 
-        initial={{ opacity: 0, x: -50 }} 
-        animate={{ opacity: 1, x: 0 }} 
-        transition={{ duration: 0.8 }}
-        className="md:w-1/2 text-center md:text-left"
-      >
-        <h1 className="text-4xl md:text-5xl font-bold text-blue-900">{text}<span className="text-blue-900">|</span></h1>
-        <p className="mt-4 text-lg text-gray-700">
-          ACM Nagpur is a vibrant community of tech enthusiasts, fostering innovation and collaboration.
-          Join us to explore new opportunities, engage in events, and grow with like-minded individuals.
-        </p>
-        <button className="mt-6 px-6 py-3 bg-blue-800 text-white rounded-lg shadow-lg hover:bg-blue-700 transition">
-          Learn More
-        </button>
-      </motion.div>
-      
-      {/* Right Section - Image */}
-      <motion.div 
-        initial={{ opacity: 0, x: 50 }} 
-        animate={{ opacity: 1, x: 0 }} 
-        transition={{ duration: 0.8 }}
-        className="md:w-1/2 flex justify-center mt-10 md:mt-0"
-      >
-        <Image 
-          src={assets.heroImage} 
-          alt="ACM Nagpur Banner"
-          width={500}
-          height={500}
-          className="rounded-lg shadow-lg"
-        />
-      </motion.div>
-    </section>
+    <div id="top" className="relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-white">
+      {/* Flickering Grid Background */}
+      <FlickeringGrid
+        className="absolute inset-0 z-0 opacity-40 [mask-image:radial-gradient(450px_circle_at_center,white,transparent)]"
+        squareSize={4}
+        gridGap={6}
+        color="#3B82F6"
+        maxOpacity={0.7} // Increased for better visibility
+        flickerChance={0.1}
+        height={800}
+        width={800}
+      />
+
+      {/* Hero Content */}
+      <section className="relative z-10 w-full flex flex-col md:flex-row items-center justify-center px-6 md:px-12 py-20">
+        {/* Left Content */}
+        <motion.div 
+          initial={{ opacity: 0, x: -50 }} 
+          animate={{ opacity: 1, x: 0 }} 
+          transition={{ duration: 0.8 }}
+          className="md:w-1/2 text-center md:text-left"
+        >
+          <h1 className="text-4xl md:text-5xl font-bold text-[#0A2A43]">
+            {text}
+            <span className="text-[#3B82F6]">|</span> {/* Blue accent */}
+          </h1>
+          <p className="mt-4 text-lg text-[#374151]">
+            ACM Nagpur is a vibrant community of tech enthusiasts, fostering innovation and collaboration.
+            Join us to explore new opportunities, engage in events, and grow with like-minded individuals.
+          </p>
+          <button className="mt-6 px-6 py-3 bg-[#0A2A43] text-white rounded-lg shadow-lg hover:bg-[#0C3A5D] transition">
+            Learn More
+          </button>
+        </motion.div>
+        
+        {/* Right Section - Image */}
+        <motion.div 
+          initial={{ opacity: 0, x: 50 }} 
+          animate={{ opacity: 1, x: 0 }} 
+          transition={{ duration: 0.8 }}
+          className="md:w-1/2 flex justify-center mt-10 md:mt-0"
+        >
+          <Image 
+            src={assets.heroImage} 
+            alt="ACM Nagpur Banner"
+            width={500}
+            height={500}
+            className="rounded-lg shadow-lg"
+          />
+        </motion.div>
+      </section>
+    </div>
   );
 }
