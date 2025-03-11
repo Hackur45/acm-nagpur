@@ -2,7 +2,7 @@
 import { FC, useEffect, useState, useRef } from "react";
 
 interface MenuItem {
-  label: string;
+  image: string; // URL for the image
   color: string;
 }
 
@@ -25,27 +25,23 @@ const CircularMenu: FC<CircularMenuProps> = ({
   const [currentIndex, setCurrentIndex] = useState(0);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   
-  // Pre-calculate angles once instead of in every render
   const angles = useRef(menuItems.map((_, index) => (360 / menuItems.length) * index)).current;
 
-  // Notify parent of selected item
   useEffect(() => {
     onItemClick(currentIndex);
   }, [currentIndex, onItemClick]);
 
-  // Client-side rendering check
   useEffect(() => {
     setIsClient(true);
   }, []);
 
-  // Auto-rotation management
   useEffect(() => {
     if (!isClient) return;
     
     const startAutoRotate = () => {
       intervalRef.current = setInterval(() => {
         setCurrentIndex(prevIndex => (prevIndex + 1) % menuItems.length);
-      }, 2000);
+      }, 3000);
     };
     
     startAutoRotate();
@@ -55,16 +51,15 @@ const CircularMenu: FC<CircularMenuProps> = ({
     };
   }, [isClient, menuItems.length]);
 
-  // Handlers
   const handleItemClick = (index: number) => {
     if (intervalRef.current) clearInterval(intervalRef.current);
     setCurrentIndex(index);
   };
-  
+
   const handleMouseEnter = () => {
     if (intervalRef.current) clearInterval(intervalRef.current);
   };
-  
+
   const handleMouseLeave = () => {
     intervalRef.current = setInterval(() => {
       setCurrentIndex(prevIndex => (prevIndex + 1) % menuItems.length);
@@ -89,7 +84,7 @@ const CircularMenu: FC<CircularMenuProps> = ({
           <span className="absolute cursor-pointer text-[7rem] -top-1/2">&uarr;</span>
         </div>
 
-        {/* Menu Items */}
+        {/* Menu Items with Images */}
         {menuItems.map((item, index) => {
           const radian = (angles[index] * Math.PI) / 180;
           const x = radius * Math.cos(radian);
@@ -98,19 +93,29 @@ const CircularMenu: FC<CircularMenuProps> = ({
 
           return (
             <button
-              key={item.label}
+              key={item.image}
               onClick={() => handleItemClick(index)}
-              className={`absolute w-20 h-20 bg-[#151515] border-4 rounded-full flex items-center justify-center text-xs font-bold uppercase cursor-pointer hover:text-white transition-all ${
-                isActive ? "scale-110 text-white" : ""
-              }`}
+              className={`absolute w-20 h-20 rounded-full flex items-center justify-center cursor-pointer transition-all duration-300
+                ${
+                  isActive
+                    ? "scale-125 shadow-[0_0_20px_rgba(255,255,255,0.5)]"
+                    : "opacity-90 hover:scale-110"
+                }
+              `}
               style={{
                 top: `calc(50% + ${y}px - 40px)`,
                 left: `calc(50% + ${x}px - 40px)`,
-                borderColor: item.color,
+                background: `linear-gradient(145deg, ${item.color}, #111)`,
                 transform: `rotate(${-circleRotation}deg)`,
+                border: `2px solid ${item.color}`,
+                boxShadow: isActive ? `0px 0px 15px ${item.color}` : "none",
               }}
             >
-              {item.label}
+              <img
+                src={item.image}
+                alt="menu-item"
+                className="w-full h-full object-cover rounded-full"
+              />
             </button>
           );
         })}

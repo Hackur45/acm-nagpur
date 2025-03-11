@@ -4,61 +4,73 @@ import InfoDisplay from "./InfoDisplay";
 import { useState } from "react";
 
 interface MenuItem {
-  label: string;
   color: string;
   name: string;
   role: string;
   title: string;
   description: string;
-  avatarUrl?: string;
+  company: string;
+  experience: string;
+  avatarUrl: string;
+  image: string;
 }
 
 const Developers = () => {
   const menuItems: MenuItem[] = [
     {
-      label: "Teri",
       color: "#89c759",
       name: "John Doe",
       role: "Developer",
       title: "Frontend Engineer",
-      description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. In quas iusto magni dolores assumenda. Voluptatem quas atque libero beatae saepe!",
+      company: "TechCorp",
+      experience: "5 years",
       avatarUrl: "/avatars/john.jpg",
+      image: "/images/john.jpg",
+      description: "Expert in React, Tailwind, and modern UI frameworks.",
     },
     {
-      label: "Maa",
       color: "#3bb4e5",
       name: "Jane Smith",
       role: "Designer",
       title: "UI/UX Expert",
-      description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. In quas iusto magni dolores assumenda. Voluptatem quas atque libero beatae saepe!",
+      company: "Creative Designs Inc.",
+      experience: "7 years",
       avatarUrl: "/avatars/jane.jpg",
+      image: "/images/jane.jpg",
+      description: "Passionate about user experience and visual storytelling.",
     },
     {
-      label: "Ko",
       color: "#823d97",
       name: "Alice Johnson",
       role: "Product Manager",
       title: "Team Lead",
-      description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. In quas iusto magni dolores assumenda. Voluptatem quas atque libero beatae saepe!",
+      company: "InnovateX",
+      experience: "10 years",
       avatarUrl: "/avatars/alice.jpg",
+      image: "/images/alice.jpg",
+      description: "Bridging the gap between technology and business.",
     },
     {
-      label: "Mera",
       color: "#eb1777",
       name: "Bob Brown",
       role: "Backend Engineer",
       title: "API Specialist",
-      description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. In quas iusto magni dolores assumenda. Voluptatem quas atque libero beatae saepe!",
+      company: "Cloud Solutions",
+      experience: "6 years",
       avatarUrl: "/avatars/bob.jpg",
+      image: "/images/bob.jpg",
+      description: "Scaling robust backend infrastructures with Go and Node.js.",
     },
     {
-      label: "Salam",
       color: "#f39c12",
       name: "Charlie Green",
       role: "QA Tester",
       title: "Quality Assurance",
-      description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. In quas iusto magni dolores assumenda. Voluptatem quas atque libero beatae saepe!",
+      company: "TestIt",
+      experience: "4 years",
       avatarUrl: "/avatars/charlie.jpg",
+      image: "/images/charlie.jpg",
+      description: "Ensuring software reliability through automated testing.",
     },
   ];
 
@@ -86,13 +98,7 @@ const Developers = () => {
       />
 
       {/* Right side: Info Display */}
-      <InfoDisplay
-        name={menuItems[activeIndex].name}
-        role={menuItems[activeIndex].role}
-        title={menuItems[activeIndex].title}
-        description={menuItems[activeIndex].description}
-        avatarUrl={menuItems[activeIndex].avatarUrl}
-      />
+      <InfoDisplay {...menuItems[activeIndex]} linkedin="https://www.linkedin.com/in/ikshit04/" />
     </div>
   );
 };

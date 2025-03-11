@@ -1,103 +1,106 @@
-"use client";
+"use client"
 
-import type { FC } from "react";
-import { useState, useEffect } from "react";
+import { type FC, useState, useEffect } from "react"
+import Image from "next/image"
+import { CalendarDays } from "lucide-react"
 
 interface MemberCardProps {
-  name: string;
-  role: string;
-  title: string;
-  description: string;
-  avatarUrl?: string;
+  name: string
+  role: string
+  title: string
+  company: string
+  experience: string
+  description: string
+  avatarUrl?: string
+  linkedin?: string
 }
 
-const InfoDisplay: FC<MemberCardProps> = ({
-  name,
-  role,
-  title,
-  description,
-  avatarUrl,
-}) => {
-  // Always declare all hooks at the top level, never conditionally
-  const [isVisible, setIsVisible] = useState(false);
-  
-  // Fixed the useEffect hook
+const InfoDisplay: FC<MemberCardProps> = ({ name, role, title, company, experience, description, avatarUrl, linkedin }) => {
+  const [isVisible, setIsVisible] = useState(false)
+
   useEffect(() => {
-    // Trigger animation after component mounts
-    const timer = setTimeout(() => setIsVisible(true), 100);
-    return () => clearTimeout(timer);
-  }, []); // Empty dependency array ensures it only runs once on mount
+    const timer = setTimeout(() => setIsVisible(true), 100)
+    return () => clearTimeout(timer)
+  }, [])
+
+  const generateQRCode = (url: string) => {
+    return `https://quickchart.io/qr?text=${encodeURIComponent(url)}&size=150`
+  }
 
   return (
-    <div 
-      className={`relative h-64 w-full overflow-hidden rounded-xl bg-gray-100 p-6 shadow-lg transition-all duration-700 ease-in-out ${
-        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+    <div
+      className={`relative w-full max-w-3xl mx-auto overflow-hidden rounded-3xl bg-white p-8 shadow-lg transition-all duration-700 ease-in-out hover:shadow-xl ${
+        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
       }`}
     >
-      {/* Curved design element - similar to the image */}
-      <div className="absolute -left-16 top-0 h-full w-64">
-        <div className="absolute h-full w-full">
-          <svg viewBox="0 0 200 400" className="h-full w-full" preserveAspectRatio="none">
-            <path
-              d="M200,0 C100,100 100,300 200,400"
-              fill="none"
-              stroke="#333"
-              strokeWidth="1"
-              opacity="0.3"
-            />
-            <path
-              d="M180,0 C80,100 80,300 180,400"
-              fill="none"
-              stroke="#333"
-              strokeWidth="1"
-              opacity="0.2"
-            />
-          </svg>
-        </div>
-      </div>
-
-      {/* Card content with layout similar to the image */}
-      <div className="relative z-10 flex h-full flex-col">
-        <div className="flex flex-col items-end text-right">
-          <h1 className="text-3xl font-bold text-gray-800 mb-1">
-            {name}
-          </h1>
-          <h2 className="text-xl font-medium text-gray-700 mb-4">
-            {title}
-          </h2>
-        </div>
-
-        {/* Role designation like "ADMIN" in the image */}
-        <div className="absolute left-6 top-6">
-          <span className="text-lg font-bold text-gray-600">{role}</span>
-        </div>
-
-        {/* Avatar area - empty circle in the image */}
-        <div className="absolute left-6 top-16">
-          <div className={`h-20 w-20 rounded-full border-2 border-gray-400 bg-white transition-all duration-1000 ease-in-out ${
-            isVisible ? "opacity-100 scale-100" : "opacity-0 scale-50"
-          }`}>
+      <div className="grid md:grid-cols-2 gap-8">
+        {/* Left Section: Avatar and Info */}
+        <div className="flex flex-col items-center text-center md:text-left md:items-start space-y-4">
+          <div className="h-32 w-32 overflow-hidden rounded-2xl border-2 border-gray-100 bg-gray-50 shadow-sm">
             {avatarUrl ? (
-              <img
-                src={avatarUrl}
-                alt={`${name}'s profile`}
-                className="h-full w-full rounded-full object-cover"
+              <Image
+                src={avatarUrl || "/placeholder.svg"}
+                alt={name}
+                width={128}
+                height={128}
+                className="h-full w-full object-cover"
               />
-            ) : null}
+            ) : (
+              <div className="flex h-full w-full items-center justify-center text-4xl font-light text-gray-400">
+                {name?.charAt(0) || "?"}
+              </div>
+            )}
+          </div>
+          <div className="space-y-2">
+            <h1 className="text-2xl font-bold text-gray-900">{name}</h1>
+            <p className="text-base text-gray-600">
+              {title} @ <span className="font-medium">{company}</span>
+            </p>
+            <span className="inline-block text-sm font-medium text-blue-600 bg-blue-50 px-3 py-1 rounded-full">
+              {role}
+            </span>
+          </div>
+          <div className="flex items-center text-sm text-gray-500 mt-2">
+            <CalendarDays className="h-4 w-4 mr-2" />
+            <span>{experience}</span>
           </div>
         </div>
 
-        {/* Description text - right-aligned like in the image */}
-        <div className="mt-auto ml-auto max-w-md text-right">
-          <p className={`text-sm leading-relaxed text-gray-600 transition-all duration-1000 delay-300 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-          }`}>
-            {description}
-          </p>
+        {/* Right Section: LinkedIn + Description */}
+        <div className="flex flex-col items-center justify-center space-y-4 text-center">
+          {linkedin ? (
+            <>
+              <h2 className="text-xl font-semibold text-gray-800">Connect on LinkedIn</h2>
+              <a
+                href={linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 hover:underline break-all"
+              >
+                {linkedin}
+              </a>
+              <Image
+                src={generateQRCode(linkedin)}
+                alt="LinkedIn QR Code"
+                width={150}
+                height={150}
+                className="rounded-lg shadow-md"
+              />
+            </>
+          ) : (
+            <p className="text-gray-500">No LinkedIn profile available.</p>
+          )}
+
+          {/* Description below LinkedIn details */}
+          <p className="text-lg leading-relaxed text-gray-700 px-4">{description}</p>
         </div>
       </div>
-    </div>
-  );
-};
 
-export default InfoDisplay;
+      {/* Decorative Elements */}
+      <div className="absolute -bottom-10 -right-10 h-32 w-32 rounded-full bg-gray-50 opacity-50"></div>
+      <div className="absolute -top-10 -left-10 h-24 w-24 rounded-full bg-blue-50 opacity-30"></div>
+    </div>
+  )
+}
+
+export default InfoDisplay
