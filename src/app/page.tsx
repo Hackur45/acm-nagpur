@@ -9,6 +9,8 @@ export default function Home() {
       <HeroSection />
       <EventsSection/>
       <ChapterCarousel/>
+      <div className="absolute top-0 left-0 w-full h-20 bg-gradient-to-b from-white to-transparent"></div>
+
       <Developers/>
       <AboutUs/>      
     </>

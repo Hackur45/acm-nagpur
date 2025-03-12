@@ -11,7 +11,6 @@ interface MenuItem {
   description: string;
   company: string;
   experience: string;
-  avatarUrl: string;
   image: string;
 }
 
@@ -24,8 +23,8 @@ const Developers = () => {
       title: "Frontend Engineer",
       company: "TechCorp",
       experience: "5 years",
-      avatarUrl: "/avatars/john.jpg",
-      image: "/images/john.jpg",
+      image:
+        "https://media.istockphoto.com/id/1364917563/photo/businessman-smiling-with-arms-crossed-on-white-background.webp?s=2048x2048&w=is&k=20&c=uEaEqFvI74GpTWzcRCiDMR3qWqS2qVzKQREVBgmcxao=",
       description: "Expert in React, Tailwind, and modern UI frameworks.",
     },
     {
@@ -35,8 +34,8 @@ const Developers = () => {
       title: "UI/UX Expert",
       company: "Creative Designs Inc.",
       experience: "7 years",
-      avatarUrl: "/avatars/jane.jpg",
-      image: "/images/jane.jpg",
+      image:
+        "https://media.istockphoto.com/id/2029984278/photo/business-woman-portrait-and-smile-with-arms-crossed-in-an-office-for-confidence-and-career.webp?s=2048x2048&w=is&k=20&c=VG74YXd1toTyaSEhcvd4QkwxPizo8XS7crKJeI5JW1k=",
       description: "Passionate about user experience and visual storytelling.",
     },
     {
@@ -46,8 +45,8 @@ const Developers = () => {
       title: "Team Lead",
       company: "InnovateX",
       experience: "10 years",
-      avatarUrl: "/avatars/alice.jpg",
-      image: "/images/alice.jpg",
+      image:
+        "https://media.istockphoto.com/id/2058319417/photo/face-business-and-woman-with-arms-crossed-smile-and-career-with-teamwork-meeting-or-planning.webp?s=2048x2048&w=is&k=20&c=RfkkNLZn_QffK9TBY7gqA48n_n4awRmsuL-cfw-nPuE=",
       description: "Bridging the gap between technology and business.",
     },
     {
@@ -57,9 +56,10 @@ const Developers = () => {
       title: "API Specialist",
       company: "Cloud Solutions",
       experience: "6 years",
-      avatarUrl: "/avatars/bob.jpg",
-      image: "/images/bob.jpg",
-      description: "Scaling robust backend infrastructures with Go and Node.js.",
+      image:
+        "https://media.gettyimages.com/id/2135840737/photo/fed-chair-powell-and-google-ceo-sundar-pichai-speak-at-stanford-university.webp?s=2048x2048&w=gi&k=20&c=P8NieByn_w0auuKzsgmqF0S9ZeAT2oWSuKP4j51_Fug=",
+      description:
+        "Scaling robust backend infrastructures with Go and Node.js.",
     },
     {
       color: "#f39c12",
@@ -68,8 +68,8 @@ const Developers = () => {
       title: "Quality Assurance",
       company: "TestIt",
       experience: "4 years",
-      avatarUrl: "/avatars/charlie.jpg",
-      image: "/images/charlie.jpg",
+      image:
+        "https://media.gettyimages.com/id/2135822410/photo/fed-chair-powell-and-google-ceo-sundar-pichai-speak-at-stanford-university.webp?s=2048x2048&w=gi&k=20&c=hsNpCP0cAlOD16ACh2oPA0iMkT_WtSiuTFKUxLVaDAQ=",
       description: "Ensuring software reliability through automated testing.",
     },
   ];
@@ -89,6 +89,8 @@ const Developers = () => {
 
   return (
     <div className="flex w-full min-h-screen items-center justify-between px-10 bg-black">
+
+
       {/* Left side: Circular Menu */}
       <CircularMenu
         menuItems={menuItems}
@@ -98,7 +100,10 @@ const Developers = () => {
       />
 
       {/* Right side: Info Display */}
-      <InfoDisplay {...menuItems[activeIndex]} linkedin="https://www.linkedin.com/in/ikshit04/" />
+      <InfoDisplay
+        {...menuItems[activeIndex]}
+        linkedin="https://www.linkedin.com/in/ikshit04/"
+      />
     </div>
   );
 };

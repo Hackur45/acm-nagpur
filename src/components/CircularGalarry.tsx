@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import { FC, useEffect, useState, useRef } from "react";
 
 interface MenuItem {
@@ -24,8 +25,10 @@ const CircularMenu: FC<CircularMenuProps> = ({
   const [isClient, setIsClient] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
-  
-  const angles = useRef(menuItems.map((_, index) => (360 / menuItems.length) * index)).current;
+
+  const angles = useRef(
+    menuItems.map((_, index) => (360 / menuItems.length) * index)
+  ).current;
 
   useEffect(() => {
     onItemClick(currentIndex);
@@ -37,15 +40,15 @@ const CircularMenu: FC<CircularMenuProps> = ({
 
   useEffect(() => {
     if (!isClient) return;
-    
+
     const startAutoRotate = () => {
       intervalRef.current = setInterval(() => {
-        setCurrentIndex(prevIndex => (prevIndex + 1) % menuItems.length);
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % menuItems.length);
       }, 3000);
     };
-    
+
     startAutoRotate();
-    
+
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
@@ -62,7 +65,7 @@ const CircularMenu: FC<CircularMenuProps> = ({
 
   const handleMouseLeave = () => {
     intervalRef.current = setInterval(() => {
-      setCurrentIndex(prevIndex => (prevIndex + 1) % menuItems.length);
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % menuItems.length);
     }, 2000);
   };
 
@@ -70,6 +73,7 @@ const CircularMenu: FC<CircularMenuProps> = ({
 
   return (
     <div className="relative w-full h-[100dvh] flex items-center justify-start">
+      
       <div
         className="relative rounded-full p-2 transition-transform duration-1000 ease-in-out"
         style={{ transform: `rotate(${circleRotation}deg)` }}
@@ -79,9 +83,20 @@ const CircularMenu: FC<CircularMenuProps> = ({
         {/* Arrow */}
         <div
           className="absolute w-32 h-32 rounded-full flex items-center justify-center text-white text-2xl uppercase transition-transform duration-1000 ease-in-out bg-[#222]"
-          style={{ transform: `translate(-50%, -50%) rotate(${arrowRotation}deg)` }}
+          style={{
+            transform: `translate(-50%, -50%) rotate(${arrowRotation}deg)`,
+          }}
         >
-          <span className="absolute cursor-pointer text-[7rem] -top-1/2">&uarr;</span>
+          <div className="w-14 h-14 bg-black border-2 border-white blur-sm rounded-full "></div>
+          <span className="absolute cursor-pointer text-[7rem] -top-1/2 -z-10">
+            <Image
+              src="/arrow.png"
+              alt="Arrow"
+              width={128} // Adjust size if needed
+              height={128}
+              className="object-contain rotate-90 invert "
+            />
+          </span>
         </div>
 
         {/* Menu Items with Images */}

@@ -11,11 +11,11 @@ interface MemberCardProps {
   company: string
   experience: string
   description: string
-  avatarUrl?: string
+  image?: string
   linkedin?: string
 }
 
-const InfoDisplay: FC<MemberCardProps> = ({ name, role, title, company, experience, description, avatarUrl, linkedin }) => {
+const InfoDisplay: FC<MemberCardProps> = ({ name, role, title, company, experience, description, image, linkedin }) => {
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
@@ -37,9 +37,9 @@ const InfoDisplay: FC<MemberCardProps> = ({ name, role, title, company, experien
         {/* Left Section: Avatar and Info */}
         <div className="flex flex-col items-center text-center md:text-left md:items-start space-y-4">
           <div className="h-32 w-32 overflow-hidden rounded-2xl border-2 border-gray-100 bg-gray-50 shadow-sm">
-            {avatarUrl ? (
+            {image ? (
               <Image
-                src={avatarUrl || "/placeholder.svg"}
+                src={image || "/placeholder.svg"}
                 alt={name}
                 width={128}
                 height={128}

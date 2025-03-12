@@ -29,53 +29,66 @@ const chapters: Chapter[] = [
 ];
 
 export default function ChapterCarousel() {
-  const [index, setIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(0);
   const router = useRouter();
 
-  const nextSlide = () => setIndex((prev) => (prev + 1) % chapters.length);
-  const prevSlide = () => setIndex((prev) => (prev - 1 + chapters.length) % chapters.length);
+  const nextSlide = () => setActiveIndex((prev) => (prev + 1) % chapters.length);
+  const prevSlide = () => setActiveIndex((prev) => (prev - 1 + chapters.length) % chapters.length);
 
   const navigateToDetails = (chapter: Chapter) => {
     const slug = chapter.name.toLowerCase().replace(/\s+/g, "-");
     router.push(`/chapters/${slug}`);
   };
 
+  const getCardPosition = (index: number) => {
+    const total = chapters.length;
+    const diff = (index - activeIndex + total) % total;
+    if (diff === 0) return { zIndex: 20, rotation: 0, scale: 1.25, opacity: 1, x: 0 };
+    const isRight = diff <= total / 2;
+    const distanceFromCenter = isRight ? diff : total - diff;
+    let x = isRight ? 150 + (distanceFromCenter - 1) * 30 : -150 - (distanceFromCenter - 1) * 30;
+    let rotation = isRight ? 6 + (distanceFromCenter - 1) * 3 : -6 - (distanceFromCenter - 1) * 3;
+    let scale = Math.max(0.8 - (distanceFromCenter - 1) * 0.1, 0.5);
+    let opacity = Math.max(0.6 - (distanceFromCenter - 1) * 0.1, 0.2);
+    let zIndex = 10 - distanceFromCenter;
+    return { zIndex, rotation, scale, opacity, x };
+  };
+
   return (
-    <div className="relative w-full max-w-3xl mx-auto py-12">
-      <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">ACM Student Chapters</h2>
+    <div className="relative w-full max-w-6xl mx-auto py-12">
+      <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">ACM Student Chapters</h2>
 
-      <div className="relative flex items-center justify-center overflow-hidden h-72">
+      <div className="relative flex items-center justify-center overflow-hidden h-96">
         {chapters.map((chapter, i) => {
-          let position = "hidden";
-          if (i === index) position = "center";
-          else if (i === (index - 1 + chapters.length) % chapters.length) position = "left";
-          else if (i === (index + 1) % chapters.length) position = "right";
-
+          const { zIndex, rotation, scale, opacity, x } = getCardPosition(i);
           return (
             <motion.div
               key={chapter.id}
-              className={`absolute w-72 h-56 bg-white shadow-lg rounded-xl flex flex-col items-center justify-center p-4 text-center cursor-pointer transition-transform duration-300 
-                ${position === "center" ? "scale-110 z-20" : "scale-90 opacity-60"} 
-                ${position === "left" ? "-translate-x-36 -rotate-6 z-10" : ""} 
-                ${position === "right" ? "translate-x-36 rotate-6 z-10" : ""}`}
-              whileHover={{ scale: 1.15 }}
+              className="absolute w-80 h-64 bg-white shadow-xl rounded-2xl flex flex-col items-center justify-center p-6 text-center cursor-pointer transition-all duration-300"
+              style={{ zIndex, transform: `translateX(${x}px) rotate(${rotation}deg) scale(${scale})`, opacity }}
+              onClick={() => (i !== activeIndex ? setActiveIndex(i) : null)}
             >
-              <h3 className="text-lg font-bold text-blue-700">{chapter.name}</h3>
-              <motion.p className="text-gray-600 text-sm mt-2">{chapter.description}</motion.p>
-              <Button 
-                onClick={() => navigateToDetails(chapter)}
-                className="mt-4 bg-blue-600 text-white hover:bg-blue-700"
-              >
-                View Details
-              </Button>
+              <h3 className="text-xl font-bold text-blue-700">{chapter.name}</h3>
+              <motion.p className="text-gray-600 text-md mt-3">{chapter.description}</motion.p>
+              {i === activeIndex && (
+                <Button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigateToDetails(chapter);
+                  }}
+                  className="mt-5 bg-blue-600 text-white hover:bg-blue-700 px-6 py-2 rounded-lg"
+                >
+                  View Details
+                </Button>
+              )}
             </motion.div>
           );
         })}
       </div>
 
-      <div className="flex justify-center gap-4 mt-6">
-        <Button onClick={prevSlide} className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg">←</Button>
-        <Button onClick={nextSlide} className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg">→</Button>
+      <div className="flex justify-center gap-6 mt-8">
+        <Button onClick={prevSlide} className="px-5 py-3 bg-gray-300 hover:bg-gray-400 rounded-lg">←</Button>
+        <Button onClick={nextSlide} className="px-5 py-3 bg-gray-300 hover:bg-gray-400 rounded-lg">→</Button>
       </div>
     </div>
   );
