@@ -20,7 +20,7 @@ export default function Navbar() {
   }, []);
 
   // Function for smooth scrolling
-  const handleScrollTo = (e: any, id: any) => {
+  const handleScrollTo = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>, id: string) => {
     e.preventDefault();
     setIsOpen(false); // Close mobile menu on click
     const section = document.getElementById(id);

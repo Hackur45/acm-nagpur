@@ -43,16 +43,21 @@ export default function ChapterCarousel() {
   const getCardPosition = (index: number) => {
     const total = chapters.length;
     const diff = (index - activeIndex + total) % total;
+  
     if (diff === 0) return { zIndex: 20, rotation: 0, scale: 1.25, opacity: 1, x: 0 };
+  
     const isRight = diff <= total / 2;
     const distanceFromCenter = isRight ? diff : total - diff;
-    let x = isRight ? 150 + (distanceFromCenter - 1) * 30 : -150 - (distanceFromCenter - 1) * 30;
-    let rotation = isRight ? 6 + (distanceFromCenter - 1) * 3 : -6 - (distanceFromCenter - 1) * 3;
-    let scale = Math.max(0.8 - (distanceFromCenter - 1) * 0.1, 0.5);
-    let opacity = Math.max(0.6 - (distanceFromCenter - 1) * 0.1, 0.2);
-    let zIndex = 10 - distanceFromCenter;
+  
+    const x = isRight ? 150 + (distanceFromCenter - 1) * 30 : -150 - (distanceFromCenter - 1) * 30;
+    const rotation = isRight ? 6 + (distanceFromCenter - 1) * 3 : -6 - (distanceFromCenter - 1) * 3;
+    const scale = Math.max(0.8 - (distanceFromCenter - 1) * 0.1, 0.5);
+    const opacity = Math.max(0.6 - (distanceFromCenter - 1) * 0.1, 0.2);
+    const zIndex = 10 - distanceFromCenter;
+  
     return { zIndex, rotation, scale, opacity, x };
   };
+  
 
   return (
     <div className="relative w-full max-w-6xl mx-auto py-12">

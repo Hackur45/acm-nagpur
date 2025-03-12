@@ -1,6 +1,7 @@
 "use client";
 
 import React, { forwardRef, useRef } from "react";
+import Image from "next/image"; // Import Next.js Image
 import { cn } from "@/lib/utils";
 import { AnimatedBeam } from "@/components/magicui/animated-beam";
 
@@ -37,7 +38,9 @@ Circle.displayName = "Circle";
 export default function ChaptersPage() {
   const containerRef = useRef<HTMLDivElement>(null);
   const centerRef = useRef<HTMLDivElement>(null);
-  const chapterRefs = chapters.map(() => useRef<HTMLDivElement>(null));
+  
+  // ✅ Create an array of refs using `useRef` and initialize them in `useEffect`
+  const chapterRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   return (
     <div className="flex flex-col items-center justify-center w-full px-6 py-10">
@@ -52,8 +55,14 @@ export default function ChaptersPage() {
         <div className="absolute inset-0 flex flex-col items-center justify-between w-full h-full">
           {chapters.map((chapter, index) => (
             <div key={chapter.name} className="flex flex-col items-center">
-              <Circle ref={chapterRefs[index]}>
-                <img src={chapter.image} alt={chapter.name} className="w-12 h-12 object-contain" />
+              <Circle ref={(el) => { chapterRefs.current[index] = el; }}>
+                <Image
+                  src={chapter.image}
+                  alt={chapter.name}
+                  width={48} // Using fixed dimensions for optimization
+                  height={48}
+                  className="object-contain"
+                />
               </Circle>
               <p className="text-sm font-medium mt-2">{chapter.name}</p>
             </div>
@@ -63,11 +72,11 @@ export default function ChaptersPage() {
           ACM Nagpur
         </Circle>
       </div>
-      
+
       {chapters.map((_, index) => (
-        <AnimatedBeam key={index} containerRef={containerRef} fromRef={chapterRefs[index]} toRef={centerRef} />
+        <AnimatedBeam key={index} containerRef={containerRef} fromRef={{ current: chapterRefs.current[index] }} toRef={centerRef} />
       ))}
-      
+
       {/* Information Section */}
       <div className="mt-12 max-w-3xl text-center">
         <h2 className="text-3xl font-semibold mb-4">About ACM Nagpur</h2>
@@ -80,3 +89,4 @@ export default function ChaptersPage() {
     </div>
   );
 }
+

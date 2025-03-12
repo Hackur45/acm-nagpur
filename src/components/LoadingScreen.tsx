@@ -12,16 +12,17 @@ export default function LoadingScreen({ onLoadingComplete }: { onLoadingComplete
   useEffect(() => {
     const timer1 = setTimeout(() => setIsText1Visible(true), 1000); // Show first text after 1s
     const timer2 = setTimeout(() => setIsText2Visible(true), 2000); // Show second text after 3s
-
-    const totalDuration = 4000; 
+  
+    const totalDuration = 4000;
     const timer3 = setTimeout(() => onLoadingComplete(), totalDuration);
-
+  
     return () => {
       clearTimeout(timer1);
       clearTimeout(timer2);
       clearTimeout(timer3);
     };
-  }, []);
+  }, [onLoadingComplete]); // Add `onLoadingComplete` as a dependency
+  
 
   return (
     <div className="relative w-full h-screen flex flex-col items-center justify-center text-white">

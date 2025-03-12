@@ -32,7 +32,6 @@ export function FlipText({
   duration = 0.5,
   delayMultiple = 0.08,
   className,
-  as: Component = "span",
   variants,
   ...props
 }: FlipTextProps) {

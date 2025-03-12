@@ -73,7 +73,6 @@ const CircularMenu: FC<CircularMenuProps> = ({
 
   return (
     <div className="relative w-full h-[100dvh] flex items-center justify-start">
-      
       <div
         className="relative rounded-full p-2 transition-transform duration-1000 ease-in-out"
         style={{ transform: `rotate(${circleRotation}deg)` }}
@@ -126,11 +125,13 @@ const CircularMenu: FC<CircularMenuProps> = ({
                 boxShadow: isActive ? `0px 0px 15px ${item.color}` : "none",
               }}
             >
-              <img
+              <Image
                 src={item.image}
                 alt="menu-item"
+                width={100} // Set an appropriate width
+                height={100} // Set an appropriate height
                 className="w-full h-full object-cover rounded-full"
-              />
+              />  
             </button>
           );
         })}
