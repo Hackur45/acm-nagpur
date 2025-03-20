@@ -121,7 +121,7 @@ export default function EventsSection() {
       </h2>
 
       {/* Category Selection Buttons */}
-      <div className="relative z-10 mb-6 flex gap-4">
+      <div className="relative z-10 mb-6 flex gap-4 flex-col md:flex-row ">
         {["Professional", "Student"].map((category) => (
           <Button
             key={category}

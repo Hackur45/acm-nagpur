@@ -25,18 +25,30 @@ const CircularMenu: FC<CircularMenuProps> = ({
   const [isClient, setIsClient] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const [IsMobile, setIsMobile] = useState(false);
 
   const angles = useRef(
     menuItems.map((_, index) => (360 / menuItems.length) * index)
   ).current;
 
   useEffect(() => {
-    onItemClick(currentIndex);
-  }, [currentIndex, onItemClick]);
+    setIsClient(true);
+    
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
+    return () => {
+      window.removeEventListener("resize", checkMobile);
+    };
+  }, []);
 
   useEffect(() => {
-    setIsClient(true);
-  }, []);
+    onItemClick(currentIndex);
+  }, [currentIndex, onItemClick]);
 
   useEffect(() => {
     if (!isClient) return;
@@ -44,7 +56,7 @@ const CircularMenu: FC<CircularMenuProps> = ({
     const startAutoRotate = () => {
       intervalRef.current = setInterval(() => {
         setCurrentIndex((prevIndex) => (prevIndex + 1) % menuItems.length);
-      }, 3000);
+      }, 3500);
     };
 
     startAutoRotate();
@@ -66,71 +78,76 @@ const CircularMenu: FC<CircularMenuProps> = ({
   const handleMouseLeave = () => {
     intervalRef.current = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % menuItems.length);
-    }, 2000);
+    }, 3500);
   };
 
   if (!isClient) return null;
 
+  const adjustedRadius = IsMobile ? radius * 0.6 : radius;
+  const menuSize = IsMobile ? "w-16 h-16" : "w-20 h-20";
+  const activeScale = IsMobile ? "scale-110" : "scale-125";
+  const arrowSize = IsMobile ? 80 : 128;
+  const arrowClass = IsMobile ? "w-10 h-10" : "w-14 h-14";
+  const rotationFix = IsMobile ? circleRotation - 90 : circleRotation - 180;
+
   return (
-    <div className="relative w-full h-[100dvh] flex items-center justify-start">
+    <div className={`relative w-full  flex items-center ${IsMobile ? 'justify-center' :'justify-end'}`}>
       <div
         className="relative rounded-full p-2 transition-transform duration-1000 ease-in-out"
-        style={{ transform: `rotate(${circleRotation}deg)` }}
+        style={{ transform: `rotate(${rotationFix}deg)` }}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
         {/* Arrow */}
         <div
-          className="absolute w-32 h-32 rounded-full flex items-center justify-center text-white text-2xl uppercase transition-transform duration-1000 ease-in-out bg-[#222]"
+          className="absolute rounded-full flex items-center justify-center text-white uppercase transition-transform duration-1000 ease-in-out bg-[#222]"
           style={{
+            width: IsMobile ? "64px" : "128px",
+            height: IsMobile ? "64px" : "128px",
             transform: `translate(-50%, -50%) rotate(${arrowRotation}deg)`,
           }}
-        >
-          <div className="w-14 h-14 bg-black border-2 border-white blur-sm rounded-full "></div>
-          <span className="absolute cursor-pointer text-[7rem] -top-1/2 -z-10">
+         >
+          <div className={`${arrowClass} bg-black border border-white blur-sm rounded-full`}></div>
+          <span className="absolute cursor-pointer -top-1/2 -z-10">
             <Image
               src="/arrow.png"
               alt="Arrow"
-              width={128} // Adjust size if needed
-              height={128}
-              className="object-contain rotate-90 invert "
+              width={arrowSize}
+              height={arrowSize}
+              className="object-contain rotate-90 invert"
             />
           </span>
         </div>
 
-        {/* Menu Items with Images */}
+        {/* Menu Items */}
         {menuItems.map((item, index) => {
           const radian = (angles[index] * Math.PI) / 180;
-          const x = radius * Math.cos(radian);
-          const y = radius * Math.sin(radian);
+          const x = adjustedRadius * Math.cos(radian);
+          const y = (adjustedRadius * Math.sin(radian)) -10;
           const isActive = index === currentIndex;
 
           return (
             <button
               key={item.image}
               onClick={() => handleItemClick(index)}
-              className={`absolute w-20 h-20 rounded-full flex items-center justify-center cursor-pointer transition-all duration-300
-                ${
-                  isActive
-                    ? "scale-125 shadow-[0_0_20px_rgba(255,255,255,0.5)]"
-                    : "opacity-90 hover:scale-110"
-                }
+              className={`absolute ${menuSize} rounded-full flex items-center justify-center cursor-pointer transition-all duration-300
+                ${isActive ? `${activeScale} shadow-[0_0_20px_rgba(255,255,255,0.5)]` : "opacity-90 hover:scale-110"}
               `}
               style={{
-                top: `calc(50% + ${y}px - 40px)`,
-                left: `calc(50% + ${x}px - 40px)`,
+                top: `calc(50% + ${y}px - 20px)`,
+                left: `calc(50% + ${x}px - 20px)`,
                 background: `linear-gradient(145deg, ${item.color}, #111)`,
                 transform: `rotate(${-circleRotation}deg)`,
-                border: `2px solid ${item.color}`,
-                boxShadow: isActive ? `0px 0px 15px ${item.color}` : "none",
+                border: `1px solid ${item.color}`,
+                boxShadow: isActive ? `0px 0px 10px ${item.color}` : "none",
               }}
             >
               <Image
                 src={item.image}
                 alt="menu-item"
-                width={100} // Set an appropriate width
-                height={100} // Set an appropriate height
-                className="w-full h-full object-cover rounded-full"
+                width={IsMobile ? 70 : 100}
+                height={IsMobile ? 70 : 100}
+                className={`w-full h-full object-cover rounded-full ${IsMobile ? "rotate-90" : "rotate-180"}`}
               />  
             </button>
           );
